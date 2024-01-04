@@ -1,0 +1,8 @@
+export {default as Home } from './Home'
+export {default as ProductsPage } from './ProductsPage'
+export {default as AboutPage } from './About'
+export {default as ContactPage } from './Contact'
+export {default as ProductInfoPage } from './ProductInfo'
+export {default as CartPage } from './Cart'
+export {default as Page404 } from './Page404'
+export {default as CheckOutpage } from './CheckOutpage'
