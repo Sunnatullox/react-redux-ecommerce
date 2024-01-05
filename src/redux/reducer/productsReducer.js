@@ -1,15 +1,26 @@
-const initialValue = {
+const productInitialValue = {
   loading: false,
   products: [],
-  singleProduct: null,
-  recommenProducts: [],
   error: null,
+};
+
+const cartInitialValue = {
   cart: localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [],
 };
+const singleProductInitialValue = {
+  loading: false,
+  singleProduct: null,
+  error: null,
+};
+const recomendProductInitialValue = {
+  loading: false,
+  recommenProducts: [],
+  error: null,
+};
 
-export const productsReducer = (state = initialValue, action) => {
+export const productsReducer = (state = productInitialValue, action) => {
   switch (action.type) {
     case "PRODUCTS_LOADING":
       return {
@@ -28,18 +39,68 @@ export const productsReducer = (state = initialValue, action) => {
         error: action.error,
         loading: false,
       };
-    case "GET_SINGLE_PRODUCT":
+    default:
+      return state;
+  }
+};
+
+export const recomendProductReducer = (
+  state = recomendProductInitialValue,
+  action
+) => {
+  switch (action.type) {
+    case "RECOMEND_PRODUCTS_LOADING":
       return {
         ...state,
-        singleProduct: action.payload,
-        loading: false,
+        loading: true,
       };
-    case "GET_PRODUCT_RECOMMEN":
+    case "GET_PRODUCT_RECOMMEN_SUCCESS":
       return {
         ...state,
         recommenProducts: action.payload,
         loading: false,
       };
+    case "RECOMEND_PRODUCTS_FAILED":
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const singleProductReducer = (
+  state = singleProductInitialValue,
+  action
+) => {
+  console.log(action)
+  switch (action.type) {
+    case "SINGLE_PRODUCTS_LOADING":
+      return {
+        ...state,
+        loading: true,
+      };
+    case "GET_SINGLE_PRODUCT_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        singleProduct: action.payload,
+      };
+    case "SINGLE_PRODUCTS_FAILED":
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const cartReducer = (state = cartInitialValue, action) => {
+  switch (action.type) {
     case "ADD_TO_CART":
       const findProd = state.cart.find((c) => c.id === action.payload.id);
       if (!findProd) {
@@ -87,6 +148,7 @@ export const productsReducer = (state = initialValue, action) => {
         ...state,
         cart: removeProduct,
       };
+
     default:
       return state;
   }

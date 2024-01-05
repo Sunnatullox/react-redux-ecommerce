@@ -17,33 +17,33 @@ export const getAllProducts = (toast, filter) => async (dispatch) => {
 };
 
 export const getSingleProduct = (id, toast) => async (dispatch) => {
-  dispatch({ type: "PRODUCTS_LOADING" });
+  dispatch({ type: "SINGLE_PRODUCTS_LOADING" });
   try {
     const { data, status } = await axios.get(
       `https://fakestoreapi.com/products/${id}`
     );
     if (status === 200) {
-      dispatch({ type: "GET_SINGLE_PRODUCT", payload: data });
+      dispatch({ type: "GET_SINGLE_PRODUCT_SUCCESS", payload: data });
     }
   } catch (error) {
     toast.succes(error.message);
-    dispatch({ type: "PRODUCTS_FAILED", error: error.message });
+    dispatch({ type: "SINGLE_PRODUCTS_FAILED", error: error.message });
   }
 };
 
 export const getRecommendationProduct =
   (category, toast) => async (dispatch) => {
-    dispatch({ type: "PRODUCTS_LOADING" });
+    dispatch({ type: "RECOMEND_PRODUCTS_LOADING" });
     try {
       const { data, status } = await axios.get(
         `https://fakestoreapi.com/products/category/${category}`
       );
       if (status === 200) {
-        dispatch({ type: "GET_PRODUCT_RECOMMEN", payload: data });
+        dispatch({ type: "GET_PRODUCT_RECOMMEN_SUCCESS", payload: data });
       }
     } catch (error) {
       toast.succes(error.message);
-      dispatch({ type: "PRODUCTS_FAILED", error: error.message });
+      dispatch({ type: "RECOMEND_PRODUCTS_FAILED", error: error.message });
     }
   };
 

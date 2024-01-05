@@ -5,7 +5,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
 function Navbar() {
-  const { cart } = useSelector((state) => state.productReducer);
+  const { cart } = useSelector((state) => state.cartReducer);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light  py-3 sticky-top">
       <div className="container">

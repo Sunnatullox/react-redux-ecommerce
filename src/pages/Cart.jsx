@@ -14,7 +14,7 @@ import {
 } from "../redux/action/productsAction";
 
 function Cart() {
-  const { cart } = useSelector((state) => state.productReducer);
+  const { cart } = useSelector((state) => state.cartReducer);
   const dispatch = useDispatch();
 
   const handelIncrementProductItem = (id) => {

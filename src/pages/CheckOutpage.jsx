@@ -5,7 +5,7 @@ import ShowCart from "../components/ShowCart";
 import { useSelector } from "react-redux";
 
 function CheckOutpage() {
-  const { cart } = useSelector((state) => state.productReducer);
+  const { cart } = useSelector((state) => state.cartReducer);
   return (
     <>
       <Navbar />
