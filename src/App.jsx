@@ -7,7 +7,9 @@ import {
   ProductInfoPage,
   CartPage,
   Page404,
-  CheckOutpage
+  CheckOutpage,
+  LoginPage,
+  RegisterPage
 } from "./pages";
 import "./styles/App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -21,6 +23,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -35,3 +39,4 @@ function App() {
 }
 
 export default App;
+

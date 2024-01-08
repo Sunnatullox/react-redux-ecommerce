@@ -17,9 +17,8 @@ function ProductInfo() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const {
-    singleProdReducer: { singleProduct,loading : singleProdLoading},
-    recomendProdReducer: { recommenProducts, loading:recomendProdLoading },
-    
+    singleProdReducer: { singleProduct, loading: singleProdLoading },
+    recomendProdReducer: { recommenProducts, loading: recomendProdLoading },
   } = useSelector((state) => state);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ function ProductInfo() {
       <Navbar />
       <div className="container">
         <div className="row">
-          {(singleProdLoading || recomendProdLoading )? (
+          {singleProdLoading || recomendProdLoading ? (
             <LoadingSkelationProduct />
           ) : (
             <ShowSimpleProduct singleProduct={singleProduct} />
@@ -49,7 +48,7 @@ function ProductInfo() {
           <div className="d-none d-md-block">
             <h2>You may also Like</h2>
             <Marquee pauseOnHover={true} pauseOnClick={true} speed={50}>
-              {(singleProdLoading || recomendProdLoading ) ? (
+              {singleProdLoading || recomendProdLoading ? (
                 <LoadingRecommendProduct />
               ) : (
                 <div className="my-4 my-4">

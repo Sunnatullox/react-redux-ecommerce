@@ -75,7 +75,7 @@ export const singleProductReducer = (
   state = singleProductInitialValue,
   action
 ) => {
-  console.log(action)
+
   switch (action.type) {
     case "SINGLE_PRODUCTS_LOADING":
       return {
