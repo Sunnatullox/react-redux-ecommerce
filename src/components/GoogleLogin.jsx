@@ -1,12 +1,10 @@
 import React from 'react'
 import { GoogleLogin as IsGoogleLogin } from '@leecheuk/react-google-login';
 import { useNavigate  } from "react-router-dom";
-const clientId = "604198012661-m2cnpb6f1r67k7fal1ocru6biu08eojd.apps.googleusercontent.com"
-const clientSecret = "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"
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID
 
 function GoogleLogin() {
     const naviget = useNavigate()
-    
     const responseGoogle = (res) => {
         localStorage.setItem("user", JSON.stringify(res.profileObj))
         localStorage.setItem("token", JSON.stringify(res.tokenId))

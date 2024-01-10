@@ -8,13 +8,13 @@ import {useFormik} from 'formik'
 const registerSchema = yup.object().shape({
   familyName: yup.string().required("First name is required"),
   givenName:yup.string().required("Given name is required"),
-  email: yup.string().email("Invalid email format").
-  required("Email is required").test("is-valid", (message) => `${message.path} is invalid`, (value) => value ? isEmailValidator(value) : new yup.ValidationError("Invalid value")),
+  email: yup.string().email("Invalid email format").required("Email is required"),
   password: yup.string().required("Password is required").min(8, 'Password is too short - should be 8 chars minimum.').
   matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
 })
 
 function Register() {
+
   const formik = useFormik({
     initialValues:{
       familyName:"",
@@ -79,7 +79,9 @@ function Register() {
                           onChange={formik.handleChange("familyName")}
                           onBlur={formik.handleBlur("familyName")}
                         />
-                        <div className="text-danger mt-1 " style={{fontSize:"13px"}}>{formik.touched.familyName && formik.errors.familyName}</div>
+                        <div className="text-danger mt-1 " style={{fontSize:"13px"}}>
+                          {formik.touched.familyName && formik.errors.familyName}
+                          </div>
                       </div>
                     </div>
                     <div className="col-md-6 mb-4">
@@ -91,7 +93,14 @@ function Register() {
                           type="text"
                           id="form3Example2"
                           className="form-control"
+                          name="givenName"
+                          value={formik.values.givenName}
+                          onChange={formik.handleChange("givenName")}
+                          onBlur={formik.handleBlur("givenName")}
                         />
+                        <div className="text-danger mt-1 " style={{fontSize:"13px"}}>
+                          {formik.touched.givenName && formik.errors.givenName}
+                          </div>
                       </div>
                     </div>
                   </div>
@@ -104,7 +113,14 @@ function Register() {
                       type="email"
                       id="form3Example3"
                       className="form-control"
+                      name="email"
+                      value={formik.values.email}
+                      onChange={formik.handleChange("email")}
+                      onBlur={formik.handleBlur("email")}
                     />
+                    <div className="text-danger mt-1" style={{fontSize:"13px"}}>
+                      {formik.touched.email && formik.errors.email}
+                      </div>
                   </div>
 
                   <div className="form-outline mb-4">
@@ -115,7 +131,14 @@ function Register() {
                       type="password"
                       id="form3Example4"
                       className="form-control"
+                      name="password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange("password")}
+                      onBlur={formik.handleBlur("password")}
                     />
+                    <div className="text-danger mt-1" style={{fontSize:"13px"}}>
+                      {formik.touched.password && formik.errors.password}
+                      </div>
                   </div>
 
                   <div className="form-check d-flex justify-content-center mb-4">
