@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/signForm.css";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -6,6 +6,9 @@ import { gapi } from "gapi-script";
 import GoogleLogin from "../components/GoogleLogin";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseDb } from "../firebase";
+import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -16,19 +19,31 @@ const loginSchema = yup.object().shape({
 });
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const formik = useFormik({
     initialValues: {
-      familyName: "",
-      givenName: "",
       email: "",
       password: "",
-      name: "",
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      console.log(values);
+      handleLoginuser(values);
     },
   });
+
+  const handleLoginuser = async (values) => {
+    try {
+      const res = await signInWithEmailAndPassword(
+        firebaseDb,
+        values.email,
+        values.password
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   useEffect(() => {
     const start = () => {
@@ -91,6 +106,7 @@ function Login() {
                       onChange={formik.handleChange("email")}
                       onBlur={formik.handleBlur("email")}
                     />
+
                     <div
                       className="text-danger mt-1"
                       style={{ fontSize: "13px" }}
@@ -103,15 +119,26 @@ function Login() {
                     <label className="form-label" htmlFor="form3Example4">
                       Password
                     </label>
-                    <input
-                      type="password"
-                      id="form3Example4"
-                      className="form-control"
-                      name="password"
-                      value={formik.values.password}
-                      onChange={formik.handleChange("password")}
-                      onBlur={formik.handleBlur("password")}
-                    />
+                    <div className="d-flex">
+                      <input
+                        type={showPassword ? "text" :  "password"}
+                        id="form3Example4"
+                        className="form-control"
+                        name="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange("password")}
+                        onBlur={formik.handleBlur("password")}
+                      />
+                      <button
+                        className="btn"
+                        type="button"
+                        onClick={() =>
+                          setShowPassword((prevState) => !prevState)
+                        }
+                      >
+                        {showPassword ? <IoMdEyeOff size={20} /> : <IoMdEye size={20} />}
+                      </button>
+                    </div>
                     <div
                       className="text-danger mt-1"
                       style={{ fontSize: "13px" }}

@@ -1,49 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/signForm.css";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
-import * as yup from 'yup'
-import {useFormik} from 'formik'
-
+import * as yup from "yup";
+import { useFormik } from "formik";
+import { firebaseDb } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, set, ref } from "firebase/database";
+import { useNavigate } from "react-router-dom";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 const registerSchema = yup.object().shape({
   familyName: yup.string().required("First name is required"),
-  givenName:yup.string().required("Given name is required"),
-  email: yup.string().email("Invalid email format").required("Email is required"),
-  password: yup.string().required("Password is required").min(8, 'Password is too short - should be 8 chars minimum.').
-  matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
-})
+  givenName: yup.string().required("Given name is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password is too short - should be 8 chars minimum.")
+    .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
+});
 
 function Register() {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
-    initialValues:{
-      familyName:"",
-      givenName:"",
-      email:"",
-      password:"",
-      name:""
+    initialValues: {
+      familyName: "",
+      givenName: "",
+      email: "",
+      password: "",
+      name: "",
     },
-    validationSchema:registerSchema,
-    onSubmit:(values) =>{
-      console.log(values)
-    } 
-  })
+    validationSchema: registerSchema,
+    onSubmit: (values) => {
+      handleRegister({
+        ...values,
+        name: values.familyName + " " + values.givenName,
+      });
+    },
+  });
 
+  const handleRegister = async (values) => {
+    try {
+      const { email, password, ...userInfo } = values;
+      const { user } = await createUserWithEmailAndPassword(
+        firebaseDb,
+        email,
+        password
+      );
 
+      navigate("/login");
+      set(ref(getDatabase, "usersAuthList/", user.uid), userInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <section className="background-radial-gradient overflow-hidden">
       <div className="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
         <div className="row gx-lg-5 align-items-center mb-5">
-          <div className="col-lg-6 mb-5 mb-lg-0" style={{zIndex: "10"}}>
+          <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: "10" }}>
             <h1
               className="my-5 display-5 fw-bold ls-tight"
-              style={{color: "hsl(218, 81%, 95%)"}}
+              style={{ color: "hsl(218, 81%, 95%)" }}
             >
               The best offer <br />
-              <span style={{color: "hsl(218, 81%, 75%)"}}>for your business</span>
+              <span style={{ color: "hsl(218, 81%, 75%)" }}>
+                for your business
+              </span>
             </h1>
-            <p className="mb-4 opacity-70" style={{color: "hsl(218, 81%, 85%)"}}>
+            <p
+              className="mb-4 opacity-70"
+              style={{ color: "hsl(218, 81%, 85%)" }}
+            >
               Lorem ipsum dolor, sit amet consectetur adipisicing elit.
               Temporibus, expedita iusto veniam atque, magni tempora mollitia
               dolorum consequatur nulla, neque debitis eos reprehenderit quasi
@@ -79,9 +113,13 @@ function Register() {
                           onChange={formik.handleChange("familyName")}
                           onBlur={formik.handleBlur("familyName")}
                         />
-                        <div className="text-danger mt-1 " style={{fontSize:"13px"}}>
-                          {formik.touched.familyName && formik.errors.familyName}
-                          </div>
+                        <div
+                          className="text-danger mt-1 "
+                          style={{ fontSize: "13px" }}
+                        >
+                          {formik.touched.familyName &&
+                            formik.errors.familyName}
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-6 mb-4">
@@ -98,9 +136,12 @@ function Register() {
                           onChange={formik.handleChange("givenName")}
                           onBlur={formik.handleBlur("givenName")}
                         />
-                        <div className="text-danger mt-1 " style={{fontSize:"13px"}}>
+                        <div
+                          className="text-danger mt-1 "
+                          style={{ fontSize: "13px" }}
+                        >
                           {formik.touched.givenName && formik.errors.givenName}
-                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -118,27 +159,48 @@ function Register() {
                       onChange={formik.handleChange("email")}
                       onBlur={formik.handleBlur("email")}
                     />
-                    <div className="text-danger mt-1" style={{fontSize:"13px"}}>
+                    <div
+                      className="text-danger mt-1"
+                      style={{ fontSize: "13px" }}
+                    >
                       {formik.touched.email && formik.errors.email}
-                      </div>
+                    </div>
                   </div>
 
                   <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="form3Example4">
                       Password
                     </label>
-                    <input
-                      type="password"
-                      id="form3Example4"
-                      className="form-control"
-                      name="password"
-                      value={formik.values.password}
-                      onChange={formik.handleChange("password")}
-                      onBlur={formik.handleBlur("password")}
-                    />
-                    <div className="text-danger mt-1" style={{fontSize:"13px"}}>
+                    <div className="d-flex">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="form3Example4"
+                        className="form-control"
+                        name="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange("password")}
+                        onBlur={formik.handleBlur("password")}
+                      />
+                      <button
+                        className="btn"
+                        type="button"
+                        onClick={() =>
+                          setShowPassword((prevState) => !prevState)
+                        }
+                      >
+                        {showPassword ? (
+                          <IoMdEyeOff size={20} />
+                        ) : (
+                          <IoMdEye size={20} />
+                        )}
+                      </button>
+                    </div>
+                    <div
+                      className="text-danger mt-1"
+                      style={{ fontSize: "13px" }}
+                    >
                       {formik.touched.password && formik.errors.password}
-                      </div>
+                    </div>
                   </div>
 
                   <div className="form-check d-flex justify-content-center mb-4">
@@ -147,15 +209,20 @@ function Register() {
                       type="checkbox"
                       value=""
                       id="form2Example33"
-                      
                       defaultChecked
                     />
-                    <label className="form-check-label" htmlFor="form2Example33">
+                    <label
+                      className="form-check-label"
+                      htmlFor="form2Example33"
+                    >
                       Subscribe to our newsletter
                     </label>
                   </div>
 
-                  <button type="submit" className="btn btn-primary btn-block mb-4 w-100">
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-block mb-4 w-100"
+                  >
                     Sign up
                   </button>
 
@@ -186,7 +253,7 @@ function Register() {
                       type="button"
                       className="btn btn-link btn-floating mx-1"
                     >
-                      <FaGithub size={16} /> 
+                      <FaGithub size={16} />
                     </button>
                   </div>
                 </form>
