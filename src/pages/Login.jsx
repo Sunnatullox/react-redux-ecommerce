@@ -9,7 +9,8 @@ import { useFormik } from "formik";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseDb } from "../firebase";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
-
+import { useNavigate } from "react-router-dom";
+import {toast} from 'react-toastify'
 const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -20,6 +21,7 @@ const loginSchema = yup.object().shape({
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -34,14 +36,20 @@ function Login() {
 
   const handleLoginuser = async (values) => {
     try {
-      const res = await signInWithEmailAndPassword(
+      const {user} = await signInWithEmailAndPassword(
         firebaseDb,
         values.email,
         values.password
       );
-      console.log(res);
+      localStorage.setItem("token", JSON.stringify(user.accessToken))
+      localStorage.setItem("user", JSON.stringify({
+        name: user.displayName || "John Doe",
+        email: user.email,
+        imageUrl:user.photoURL ||  "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"
+      }))
+      navigate("/")
     } catch (error) {
-      console.log(error.message);
+      toast.error("sory this email or password is incorrect")
     }
   };
 

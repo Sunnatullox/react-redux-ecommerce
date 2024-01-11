@@ -3,9 +3,9 @@ import "../styles/signForm.css";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { firebaseDb } from "../firebase";
+import { firebaseDb, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, set, ref } from "firebase/database";
+import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
@@ -46,15 +46,13 @@ function Register() {
 
   const handleRegister = async (values) => {
     try {
-      const { email, password, ...userInfo } = values;
-      const { user } = await createUserWithEmailAndPassword(
+      const { email, password} = values;
+       await createUserWithEmailAndPassword(
         firebaseDb,
         email,
         password
       );
-
       navigate("/login");
-      set(ref(getDatabase, "usersAuthList/", user.uid), userInfo);
     } catch (error) {
       console.log(error);
     }
