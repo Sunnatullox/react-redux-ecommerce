@@ -3,9 +3,8 @@ import "../styles/signForm.css";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { firebaseDb, db } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { firebaseDb } from "../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
@@ -46,12 +45,18 @@ function Register() {
 
   const handleRegister = async (values) => {
     try {
-      const { email, password} = values;
-       await createUserWithEmailAndPassword(
+      const { email, password, name} = values;
+      const res =  await createUserWithEmailAndPassword(
         firebaseDb,
         email,
         password
       );
+   
+      await updateProfile(res.user,{
+        displayName: name,
+        photoURL: "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"
+      })
+      console.log(res)
       navigate("/login");
     } catch (error) {
       console.log(error);

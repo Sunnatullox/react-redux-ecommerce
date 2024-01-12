@@ -72,17 +72,14 @@ function Navbar() {
             {user && (
               <div className="dropdown m-2">
               <Link
-                // data-mdb-dropdown-init
                 className="ropdown-toggle d-flex align-items-center hidden-arrow"
                 to="/profile"
-                // id="navbarDropdownMenuAvatar"
-                // role="button"
-                // aria-expanded="false"
               >
                 <img
                   src={user?.imageUrl}
                   className="rounded-circle"
                   height="35"
+                  title={user.name}
                   width="35"
                   alt="Black and White Portrait of a Man"
                   loading="lazy"

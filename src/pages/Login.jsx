@@ -43,9 +43,9 @@ function Login() {
       );
       localStorage.setItem("token", JSON.stringify(user.accessToken))
       localStorage.setItem("user", JSON.stringify({
-        name: user.displayName || "John Doe",
+        name: user.displayName ,
         email: user.email,
-        imageUrl:user.photoURL ||  "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"
+        imageUrl:user.photoURL 
       }))
       navigate("/")
     } catch (error) {
