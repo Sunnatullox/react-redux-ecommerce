@@ -51,7 +51,6 @@ function Register() {
         email,
         password
       );
-   
       await updateProfile(res.user,{
         displayName: name,
         photoURL: "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"

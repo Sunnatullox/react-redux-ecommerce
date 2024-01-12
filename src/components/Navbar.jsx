@@ -85,20 +85,6 @@ function Navbar() {
                   loading="lazy"
                 />
               </Link>
-              {/* <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarDropdownMenuAvatar"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">My profile</a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">Settings</a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">Logout</a>
-                </li>
-              </ul> */}
             </div>
             )}
           </div>
